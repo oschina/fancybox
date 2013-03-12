@@ -16,7 +16,7 @@
  */
 
 ;(function($) {
-	var tmp, loading, overlay, wrap, outer, content, close, title, nav_left, nav_right,
+	var tmp, loading, overlay, wrap, outer, content, close, title, nav_left, nav_right,ctn_img,
 
 		selectedIndex = 0, selectedOpts = {}, selectedArray = [], currentIndex = 0, currentOpts = {}, currentArray = [],
 
@@ -304,14 +304,26 @@
 		},
 
 		_process_image = function() {
-			selectedOpts.width = imgPreloader.width;
-			selectedOpts.height = imgPreloader.height;
 
-			$("<img />").attr({
+			var isTinyImage = imgPreloader.width*imgPreloader.height < selectedOpts.minWidth*selectedOpts.minHeight;
+
+			selectedOpts.width = isTinyImage ? selectedOpts.minWidth:imgPreloader.width;
+			selectedOpts.height = isTinyImage ? selectedOpts.minHeight:imgPreloader.height;
+
+			ctn_img = $("<img />").attr({
 				'id' : 'fancybox-img',
 				'src' : imgPreloader.src,
 				'alt' : selectedOpts.title
-			}).appendTo( tmp );
+			});
+
+			if(isTinyImage){
+				ctn_img.css({
+					width:imgPreloader.width,
+					height:imgPreloader.height
+				});
+			}
+
+			ctn_img.appendTo( tmp );
 
 			_show();
 		},
@@ -615,6 +627,17 @@
 				$('<iframe id="fancybox-frame" name="fancybox-frame' + new Date().getTime() + '" frameborder="0" hspace="0" ' + ($.browser.msie ? 'allowtransparency="true""' : '') + ' scrolling="' + selectedOpts.scrolling + '" src="' + currentOpts.href + '"></iframe>').appendTo(content);
 			}
 
+			var isTinyImage = imgPreloader.width*imgPreloader.height < selectedOpts.minWidth*selectedOpts.minHeight;
+
+			if(isTinyImage){
+				ctn_img.css({
+					'width':imgPreloader.width,
+					'height':imgPreloader.height
+				});
+				var lh = (content.height() - title.height())+'px';
+				content.css({'line-height':lh});
+			}
+
 			wrap.show();
 
 			busy = false;
@@ -668,6 +691,7 @@
 				'width' : dim.width - currentOpts.padding * 2,
 				'height' : dim.height - (titleHeight * pos) - currentOpts.padding * 2
 			});
+
 		},
 
 		_get_viewport = function() {
@@ -1140,6 +1164,9 @@
 		showNavArrows : true,
 		enableEscapeButton : true,
 		enableKeyboardNav : true,
+
+		minWidth:150,
+		minHeight:150,
 
 		onStart : function(){},
 		onCancel : function(){},
