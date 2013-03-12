@@ -16,7 +16,7 @@ fancybox v1.3.4 改进，支持设置最小宽度和高度
   minWidth = 150,minHeight = 150
 ```
 ###注:
->请自行pack使用，建议pack工具：[OSTools JS Format](http://www.ostools.net/jscompress)
+>请自行pack [jquery.fancybox-1.3.4.js](https://raw.github.com/oschina/fancybox/master/fancybox/jquery.fancybox-1.3.4.js) 后使用，建议pack工具：[OSTools JS Format](http://www.ostools.net/jscompress)
 
 ###TODO:
 - [ ] 点击小图打开、隐藏动画效果
